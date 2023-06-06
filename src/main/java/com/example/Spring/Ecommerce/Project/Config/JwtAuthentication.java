@@ -2,6 +2,7 @@ package com.example.Spring.Ecommerce.Project.Config;
 
 import com.example.Spring.Ecommerce.Project.Service.JwtService;
 //import com.example.Spring.Ecommerce.Project.Service.UserDetailsService;
+import io.jsonwebtoken.JwtException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -36,26 +37,32 @@ public class JwtAuthentication extends OncePerRequestFilter {
             filterChain.doFilter(request,response);
             return;
         }
+        try {
+            jwt = authHeader.substring(7);
+            username = jwtService.extractUsername(jwt);
 
-        jwt = authHeader.substring(7);
-        username = jwtService.extractUsername(jwt);
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+                if(jwtService.isTokenValid(jwt, userDetails)) {
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
 
-            if(jwtService.isTokenValid(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
+                    authToken.setDetails(new WebAuthenticationDetailsSource()
+                            .buildDetails(request));
 
-                authToken.setDetails(new WebAuthenticationDetailsSource()
-                        .buildDetails(request));
-
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
             }
+            filterChain.doFilter(request,response);
         }
-        filterChain.doFilter(request,response);
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            filterChain.doFilter(request,response);
+        }
     }
+
 }

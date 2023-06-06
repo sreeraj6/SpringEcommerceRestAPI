@@ -1,14 +1,18 @@
 package com.example.Spring.Ecommerce.Project.Repository;
 
 import com.example.Spring.Ecommerce.Project.Model.Cart;
-import com.example.Spring.Ecommerce.Project.Model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Long> {
 
-    public Optional<Product> findProductByUserIdProId(Long userId, Long proId);
+    @Query(value = "select * from cart where proid = :proId and username = :username", nativeQuery = true)
+    Optional<Cart> findProductByUserIdProId(String username, Long proId);
+
+    List<Cart> findByUsername(String username);
 }

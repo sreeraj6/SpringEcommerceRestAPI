@@ -1,9 +1,11 @@
 package com.example.Spring.Ecommerce.Project.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Data
 @Table(name = "product")
 public class Product {
