@@ -9,10 +9,9 @@ import java.util.List;
 public interface UserService {
 
         List<Product> getProducts();
+        CartResponse addToCart(Long proId, String username);
+        List<Product> getCartProduct(String username);
+        OrderResponse orderNow(String  username, List<Product> productList);
 
-        CartResponse addToCart(Long proId, Long userid);
-
-        OrderResponse orderNow(Long proId, List<Product> productList);
-
-        OrderResponse orderNow(Long proId, Product product);
+        OrderResponse orderNow(String  username, Product product);
 }
