@@ -1,8 +1,8 @@
 package com.example.Spring.Ecommerce.Project.Service;
 
-import com.example.Spring.Ecommerce.Project.Dao.AuthenticationResponse;
-import com.example.Spring.Ecommerce.Project.Dao.LoginRequest;
-import com.example.Spring.Ecommerce.Project.Dao.RegisterRequest;
+import com.example.Spring.Ecommerce.Project.Dto.AuthenticationResponse;
+import com.example.Spring.Ecommerce.Project.Dto.LoginRequest;
+import com.example.Spring.Ecommerce.Project.Dto.RegisterRequest;
 import com.example.Spring.Ecommerce.Project.Model.Role;
 import com.example.Spring.Ecommerce.Project.Model.User;
 import com.example.Spring.Ecommerce.Project.Repository.UserRepository;
@@ -25,7 +25,7 @@ public class AuthenticationService {
     @Autowired
     private AuthenticationManager authenticationManager;
     public AuthenticationResponse register(RegisterRequest request) {
-        if(userRepository.findByEmail(request.getEmail()) != null) {
+        if(userRepository.findByEmail(request.getEmail()).isPresent()) {
             return null;
         }
         var user = User.builder()

@@ -1,4 +1,4 @@
-package com.example.Spring.Ecommerce.Project.Dao;
+package com.example.Spring.Ecommerce.Project.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequest {
-    private String email;
-    private String password;
+public class AuthenticationResponse {
+
+    private String token;
 }

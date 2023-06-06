@@ -1,8 +1,8 @@
 package com.example.Spring.Ecommerce.Project.Controller;
 
-import com.example.Spring.Ecommerce.Project.Dao.AuthenticationResponse;
-import com.example.Spring.Ecommerce.Project.Dao.LoginRequest;
-import com.example.Spring.Ecommerce.Project.Dao.RegisterRequest;
+import com.example.Spring.Ecommerce.Project.Dto.AuthenticationResponse;
+import com.example.Spring.Ecommerce.Project.Dto.LoginRequest;
+import com.example.Spring.Ecommerce.Project.Dto.RegisterRequest;
 import com.example.Spring.Ecommerce.Project.Service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ public class AuthController {
         if(response == null) {
             return new ResponseEntity<>("Email exist", HttpStatus.BAD_REQUEST);
         }
-        return ResponseEntity.ok(authenticationService.register(request));
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")

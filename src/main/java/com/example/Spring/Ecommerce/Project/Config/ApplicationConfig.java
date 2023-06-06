@@ -22,7 +22,6 @@ public class ApplicationConfig {
 //    @Autowired
     @Autowired
     private UserRepository userRepository;
-//    private final UserDetailsService userDetailsService;
 
     @Bean
     public UserDetailsService userDetailsService() {

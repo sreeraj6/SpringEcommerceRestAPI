@@ -1,4 +1,4 @@
-package com.example.Spring.Ecommerce.Project.Dao;
+package com.example.Spring.Ecommerce.Project.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponse {
+public class RegisterRequest {
 
-    private String token;
+    private String name;
+    private String email;
+    private String password;
 }
