@@ -2,11 +2,13 @@ package com.example.Spring.Ecommerce.Project.Service;
 
 import com.example.Spring.Ecommerce.Project.Dto.CartResponse;
 import com.example.Spring.Ecommerce.Project.Dto.OrderResponse;
+import com.example.Spring.Ecommerce.Project.Dto.PayModeAndAddress;
+import com.example.Spring.Ecommerce.Project.Dto.PlacedResponse;
 import com.example.Spring.Ecommerce.Project.Model.Cart;
+import com.example.Spring.Ecommerce.Project.Model.ConfirmOrder;
 import com.example.Spring.Ecommerce.Project.Model.Product;
-import com.example.Spring.Ecommerce.Project.Repository.CartRepository;
-import com.example.Spring.Ecommerce.Project.Repository.ProductRepository;
-import com.example.Spring.Ecommerce.Project.Repository.UserRepository;
+import com.example.Spring.Ecommerce.Project.Model.StageOrder;
+import com.example.Spring.Ecommerce.Project.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,11 @@ public class UserServiceImplementation implements UserService{
 
     @Autowired
     private CartRepository cartRepository;
+    @Autowired
+    private StageOrderRepository stageOrderRepository;
+
+    @Autowired
+    private ConfirmOrderRepository confirmOrderRepository;
 
     @Override
     public List<Product> getProducts() {
@@ -77,6 +84,30 @@ public class UserServiceImplementation implements UserService{
 
     @Override
     public OrderResponse orderNow(String  username, Product product) {
-        return null;
+        Cart cartItem = cartRepository.findProductByUserIdProId(username, product.getPid()).get();
+        StageOrder order = new StageOrder(cartItem,product,username);
+        StageOrder savedOrder = stageOrderRepository.save(order);
+        return new OrderResponse(savedOrder.getStg_oid(),product.getPid(),product.getPname(),cartItem.getQuantity(),product.getPrice(),savedOrder.getTotalprice());
+    }
+
+    @Override
+    public PlacedResponse placeOrder(Long stg_id, PayModeAndAddress payModeAndAddress) {
+        StageOrder stageOrder = stageOrderRepository.getById(stg_id);
+        try {
+            Product product = productRepository.getById(stageOrder.getPid());
+            if(product.getQuantity() >= stageOrder.getQuantity()) {
+                ConfirmOrder confirmOrder = new ConfirmOrder(stageOrder,payModeAndAddress);
+                product.setQuantity(product.getQuantity()-stageOrder.getQuantity());
+                productRepository.save(product);
+                stageOrderRepository.deleteById(stg_id);
+                cartRepository.deleteById(stageOrder.getCartId());
+                return new PlacedResponse("Order Placed Successfully");
+            }
+            return new PlacedResponse("Error Occured");
+        }
+        catch (Exception e) {
+            return new PlacedResponse("Error Occured");
+        }
+
     }
 }
