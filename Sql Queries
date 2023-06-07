@@ -1,0 +1,14 @@
+create schema springecomm;
+use springecomm;
+alter table user add unique (email);
+create table user(uid bigint auto_increment primary key, name varchar(20), email varchar(30) unique, password varchar(500), role varchar(40));
+create table product(pid bigint auto_increment primary key, pname varchar(30), category varchar(30), quantity integer, price integer);
+create table cart(cartId bigint auto_increment primary key, proId bigint, username varchar(50), quantity integer); 
+alter table cart add column status integer;
+create table stg_order(stg_oid bigint auto_increment primary key,cartid bigint,pid bigint, quantity integer, price integer, totalprice integer, username varchar(40));
+create table confirm_order(order_id bigint auto_increment primary key,cartid bigint,pid bigint, quantity integer, price integer, totalprice integer, username varchar(40), address varchar(40), pincode varchar(30), paymode varchar(30), status int);
+select * from stg_order;
+select  * from  user;
+select * from product;
+select * from cart;
+select * from confirm_order;
