@@ -14,7 +14,7 @@ public class ConfirmOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
-    private Long stg_oid;
+    private Long order_id;
     @Column(name = "cartid")
     private Long cartId;
     @Column(name = "pid")
@@ -36,7 +36,7 @@ public class ConfirmOrder {
     @Column(name = "status")
     private int status;
 
-    public ConfirmOrder(StageOrder stageOrder, PayModeAndAddress payModeAndAddress) {
+    public ConfirmOrder(StageOrder stageOrder, PayModeAndAddress payModeAndAddress,int status) {
         cartId = stageOrder.getCartId();
         pid = stageOrder.getPid();
         quantity = stageOrder.getQuantity();
@@ -46,6 +46,13 @@ public class ConfirmOrder {
         address = payModeAndAddress.getAddress();
         pincode = payModeAndAddress.getPincode();
         payMode = payModeAndAddress.getPaymentMode();
-        status = 1;
+        this.status = status;
+    }
+
+    public boolean isUpdateEnable() {
+        if(status == 0) {
+            return false;
+        }
+        return true;
     }
 }

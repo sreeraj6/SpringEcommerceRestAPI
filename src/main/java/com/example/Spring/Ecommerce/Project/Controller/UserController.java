@@ -41,7 +41,7 @@ public class UserController {
         return userService.getProducts();
     }
 
-    @PostMapping("/products/{pid}")
+    @PostMapping("/product-to-cart/{pid}")
     public CartResponse addToCart(HttpServletRequest headers,@PathVariable("pid") Long proid) {
         String token = headers.getHeader("Authorization").substring(7);
         return userService.addToCart(proid, jwtService.extractUsername(token));
@@ -57,13 +57,13 @@ public class UserController {
         return new ResponseEntity<>("No product found in your cart", HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/order-now")
+    @PostMapping("/order-now")
     public ResponseEntity<?> orderNow(HttpServletRequest header,@RequestBody Product product) {
         String token = header.getHeader("Authorization").substring(7);
         return ResponseEntity.ok(userService.orderNow(jwtService.extractUsername(token), product ));
     }
 
-    @GetMapping("/order-place/{stg_id}")
+    @PostMapping("/order-place/{stg_id}")
     public PlacedResponse placeOrder(@PathVariable("stg_id") Long stg_id, @RequestBody PayModeAndAddress payModeAndAddress){
         return userService.placeOrder(stg_id, payModeAndAddress);
     }

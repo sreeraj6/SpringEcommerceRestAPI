@@ -50,7 +50,7 @@ public class UserServiceImplementation implements UserService{
                 cartItem.setQuantity(cartItem.getQuantity()+1);
             }
             else{
-                cartItem = new Cart(proId,username,1);
+                cartItem = new Cart(proId,username,1,1);
             }
             cartRepository.save(cartItem);
             Product product = productRepository.getById(proId);
@@ -96,8 +96,9 @@ public class UserServiceImplementation implements UserService{
         try {
             Product product = productRepository.getById(stageOrder.getPid());
             if(product.getQuantity() >= stageOrder.getQuantity()) {
-                ConfirmOrder confirmOrder = new ConfirmOrder(stageOrder,payModeAndAddress);
+                ConfirmOrder confirmOrder = new ConfirmOrder(stageOrder,payModeAndAddress,1);
                 product.setQuantity(product.getQuantity()-stageOrder.getQuantity());
+                confirmOrderRepository.save(confirmOrder);
                 productRepository.save(product);
                 stageOrderRepository.deleteById(stg_id);
                 cartRepository.deleteById(stageOrder.getCartId());

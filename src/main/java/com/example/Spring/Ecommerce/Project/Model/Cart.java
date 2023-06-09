@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "cart")
 public class Cart {
-    public Cart(Long proId, String username, Integer quantity) {
+    public Cart(Long proId, String username, Integer quantity, Integer status) {
         this.proId = proId;
         this.username = username;
         this.quantity = quantity;

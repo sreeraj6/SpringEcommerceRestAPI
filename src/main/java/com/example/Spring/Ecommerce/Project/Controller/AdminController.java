@@ -1,7 +1,9 @@
 package com.example.Spring.Ecommerce.Project.Controller;
 
+import com.example.Spring.Ecommerce.Project.Dto.CommonResponse;
 import com.example.Spring.Ecommerce.Project.Dto.ProductRequest;
 import com.example.Spring.Ecommerce.Project.Model.Product;
+import com.example.Spring.Ecommerce.Project.Service.AdminService;
 import com.example.Spring.Ecommerce.Project.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,8 @@ public class AdminController {
 
     @Autowired
     ProductService productService;
+    @Autowired
+    private AdminService adminService;
 
     @GetMapping("/login")
     public String loginGet() {
@@ -36,13 +40,27 @@ public class AdminController {
         return ResponseEntity.ok(products);
     }
 
-    @PostMapping("/update-product/{pid}")
-    public Product updateProduct(@PathVariable("pid") Long pid, @RequestBody Product product) {
+    @PutMapping("/update-product/{pid}")
+    public ResponseEntity<?> updateProduct(@PathVariable("pid") Long pid, @RequestBody Product product) {
         return productService.updateProduct(pid,product);
     }
 
-    @PostMapping("/delete-product/{pid}")
+    @DeleteMapping("/delete-product/{pid}")
     public ProductRequest deleteProduct(@PathVariable("pid") Long prodId) {
         return productService.deleteProduct(prodId);
+    }
+
+    @GetMapping("/get-orders")
+    public ResponseEntity<?> getOrders() {
+        return ResponseEntity.ok(adminService.getLiveOrder());
+    }
+
+    @PutMapping("/update-status/{oid}")
+    public ResponseEntity<?> updateOrderStatus(@PathVariable("oid") Long oid) {
+        CommonResponse commonResponse = adminService.updateOrderStatus(oid);
+        if(commonResponse.isTrue()) {
+            return ResponseEntity.ok(commonResponse);
+        }
+        return new ResponseEntity<>(commonResponse, HttpStatus.BAD_REQUEST);
     }
 }
