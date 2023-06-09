@@ -65,7 +65,6 @@ public class ProductServiceImplementation implements ProductService{
     @Override
     public ProductRequest deleteProduct(Long productId) {
         try {
-            cartRepository.updateStatusOfDeleted(productId);
             productRepository.deleteById(productId);
             return new ProductRequest(new Date().toString(), "Succesfully Deleted");
         }

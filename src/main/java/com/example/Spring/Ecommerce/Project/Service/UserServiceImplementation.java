@@ -67,11 +67,14 @@ public class UserServiceImplementation implements UserService{
         List<Cart> cartItems = cartRepository.findByUsername(username);
         List<Product> cartProducts = new ArrayList<>();
         for(Cart item : cartItems) {
-            if(item.getStatus() != 0) {
+            if(productRepository.existsById(item.getProId())) {
                 Product product = productRepository.getById(item.getProId());
                 if(product.getQuantity() >= item.getQuantity()){
                     cartProducts.add(product);
                 }
+            }
+            else{
+                cartRepository.deleteById(item.getCartId());
             }
         }
         return cartProducts;
