@@ -16,6 +16,4 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
 
     List<Cart> findByUsername(String username);
 
-    @Query(value = "update cart set status = 1 where proid = :proId", nativeQuery = true)
-    void updateStatusOfDeleted(Long proId);
 }

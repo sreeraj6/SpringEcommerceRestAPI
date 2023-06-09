@@ -54,7 +54,7 @@ public class UserController {
         if(!cartProducts.isEmpty()) {
             return ResponseEntity.ok(cartProducts);
         }
-        return new ResponseEntity<>("No product found in your cart", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("No product found in your cart", HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/order-now")
